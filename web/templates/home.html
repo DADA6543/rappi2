@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inicio - Tiendas Poli JIC</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f4f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #1c3c6e;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    header img {
+      max-height: 60px;
+      margin-bottom: 10px;
+    }
+
+    main {
+      padding: 30px 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #1c3c6e;
+      margin-bottom: 30px;
+    }
+
+    .store-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .store {
+      background-color: white;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .store:hover {
+      transform: translateY(-4px);
+    }
+
+    .store img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .store h3 {
+      margin: 15px 0;
+      color: #1c3c6e;
+    }
+
+    .store a {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #f0a500;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .store a:hover {
+      background-color: #e58e00;
+    }
+
+    .admin-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #f0a500;
+      border: none;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .admin-button:hover {
+      background-color: #e58e00;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="https://www.redttu.edu.co/es/wp-content/uploads/2015/12/15.-POLI-JIC.png" alt="Logo Poli JIC">
+    <h1>Rappi2</h1>
+    <p>Tu servicio de domicilios exclusivo del Politécnico Jaime Isaza Cadavid</p>
+
+    <!-- Botón del carrito -->
+    <div style="position: absolute; top: 20px; right: 20px;">
+      <a href="{% url 'carrito' %}" style="position: relative; text-decoration: none; color: white;">
+        🛒
+        <span id="carrito-contador" style="
+          background-color: red;
+          color: white;
+          border-radius: 50%;
+          padding: 2px 6px;
+          font-size: 12px;
+          position: absolute;
+          top: -10px;
+          right: -10px;
+        ">0</span>
+      </a>
+    </div>
+
+    <!-- Botón de administración -->
+    <button class="admin-button"onclick="window.location.href='../admin/'">Administrar</button>
+  </header>
+
+  <main>
+    <h2>Tiendas Disponibles</h2>
+    <div class="store-list">
+      <!-- Tienda 1: Útiles escolares -->
+      <div class="store">
+        <img src="https://images.pexels.com/photos/5088007/pexels-photo-5088007.jpeg" alt="Tienda de útiles escolares">
+        <h3><a href="{% url 'utiles' %}">Papelería Campus</a></h3>
+      </div>
+
+      <!-- Tienda 2: Comida -->
+      <div class="store">
+        <img src="https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg" alt="Tienda de comida">
+        <h3><a href="{% url 'comidas' %}">Poli Sabor</a></h3>
+      </div>
+
+      <!-- Tienda 3: Ropa -->
+      <div class="store">
+        <img src="https://images.pexels.com/photos/2983464/pexels-photo-2983464.jpeg" alt="Tienda de ropa">
+        <h3><a href="{% url 'ropa' %}">Moda Estudiantil</a></h3>
+      </div>
+    </div>
+  </main>
+  <script>
+    function actualizarContador() {
+      const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+      const contador = document.getElementById("carrito-contador");
+      if (contador) contador.textContent = carrito.length;
+    }
+
+    document.addEventListener("DOMContentLoaded", actualizarContador);
+  </script>
+</body>
+</html>

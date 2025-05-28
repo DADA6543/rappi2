@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel de Administración - Moda Estudiantil</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f5f5f5;
+    }
+
+    h1 {
+      color: #1c3c6e;
+    }
+
+    form {
+      margin-bottom: 30px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    input, button {
+      padding: 10px;
+      margin-bottom: 10px;
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #1c3c6e;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #16305a;
+    }
+
+    .producto {
+      background-color: white;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .producto img {
+      max-width: 100px;
+      height: auto;
+      display: block;
+      margin-top: 5px;
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Administrar Productos - Moda Estudiantil</h1>
+
+  <form id="formulario-producto">
+    <input type="text" id="nombre" placeholder="Nombre del producto" required>
+    <input type="text" id="imagen" placeholder="URL de la imagen" required>
+    <input type="number" id="precio" placeholder="Precio en pesos" required>
+    <button type="submit">Agregar producto</button>
+  </form>
+
+  <h2>Productos actuales</h2>
+  <div id="lista-productos"></div>
+
+  <script>
+    function guardarProducto(producto) {
+      let productos = JSON.parse(localStorage.getItem("productosRopaAdmin")) || [];
+      productos.push(producto);
+      localStorage.setItem("productosRopaAdmin", JSON.stringify(productos));
+      mostrarProductos();
+    }
+
+    function eliminarProducto(index) {
+      let productos = JSON.parse(localStorage.getItem("productosRopaAdmin")) || [];
+      productos.splice(index, 1);
+      localStorage.setItem("productosRopaAdmin", JSON.stringify(productos));
+      mostrarProductos();
+    }
+
+    function mostrarProductos() {
+      const lista = document.getElementById("lista-productos");
+      lista.innerHTML = "";
+      const productos = JSON.parse(localStorage.getItem("productosRopaAdmin")) || [];
+
+      productos.forEach((p, i) => {
+        const div = document.createElement("div");
+        div.className = "producto";
+        div.innerHTML = `
+          <strong>${p.nombre}</strong>
+          <button class="delete-btn" data-index="${i}">Eliminar</button>
+          <img src="${p.imagen}" alt="${p.nombre}">
+          <p>Precio: $${p.precio}</p>
+        `;
+        lista.appendChild(div);
+
+        div.querySelector('.delete-btn').addEventListener('click', () => {
+          eliminarProducto(i);
+        });
+      });
+    }
+
+    document.getElementById("formulario-producto").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const nombre = document.getElementById("nombre").value.trim();
+      const imagen = document.getElementById("imagen").value.trim();
+      const precio = parseInt(document.getElementById("precio").value, 10);
+      guardarProducto({ nombre, imagen, precio });
+      this.reset();
+    });
+
+    document.addEventListener("DOMContentLoaded", mostrarProductos);
+  </script>
+
+</body>
+</html>
