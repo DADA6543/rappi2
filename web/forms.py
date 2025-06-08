@@ -15,4 +15,5 @@ urlpatterns = [
     path('admin_ropa/', views.admin_ropa, name='admin_ropa'),
     # Otras rutas de tu proyecto...
     path('api/', include('api.urls')),
+    ]
 
