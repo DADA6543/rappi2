@@ -89,6 +89,7 @@ DATABASES = {
     'default': dj_database_url.parse(
         os.environ.get("JAWSDB_URL"),
         engine='django.db.backends.mysql'
+        sslmode=False
     )
 }
 
