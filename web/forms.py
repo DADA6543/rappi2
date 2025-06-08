@@ -1,11 +1,18 @@
-from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.urls import path
+from django.urls import path, include
+from . import views
 
-class RegistroForm(UserCreationForm):
-    email = forms.EmailField(required=True)
 
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
+urlpatterns = [
+    path('home/', views.home, name='home'),
+    path('comidas/', views.comidas, name='comidas'),
+    path('carrito/', views.carrito, name='carrito'),
+    path('ropa/', views.ropa, name='ropa'),
+    path('utiles/', views.utiles, name='utiles'),
+    path('admin_panel/', views.admin_panel, name='admin_panel'),  # Evita llamar la vista como 'admin' porque puede chocar con el admin de Django
+    path('admin_comida/', views.admin_comida, name='admin_comida'),
+    path('admin_utiles/', views.admin_utiles, name='admin_utiles'),
+    path('admin_ropa/', views.admin_ropa, name='admin_ropa'),
+    # Otras rutas de tu proyecto...
+    path('api/', include('api.urls')),
 
