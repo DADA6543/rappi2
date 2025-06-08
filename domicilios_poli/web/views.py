@@ -1,4 +1,8 @@
-from django.shortcuts import render
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib import messages
+from .forms import CustomRegisterForm
 
 def home(request):
     return render(request, 'home.html')
@@ -26,3 +30,19 @@ def admin_utiles(request):
 
 def admin_ropa(request):
     return render(request, 'admin_ropa.html')
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            if form.cleaned_data['is_superuser']:
+                user.is_superuser = True
+                user.is_staff = True
+            user.save()
+            messages.success(request, "Usuario creado correctamente.")
+            return redirect('login')  # O tu vista de inicio de sesión
+    else:
+        form = CustomRegisterForm()
+        return render(request, 'register.html', {'form': form})
