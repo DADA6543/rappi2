@@ -46,18 +46,32 @@
 <body>
   <div class="form-container">
     <h2>Registro</h2>
-    <form method="post">
-      {% csrf_token %}
-      {{ form.username.label_tag }}{{ form.username }}
-      {{ form.email.label_tag }}{{ form.email }}
-      {{ form.password.label_tag }}{{ form.password }}
-      {{ form.confirm_password.label_tag }}{{ form.confirm_password }}
-      {{ form.is_superuser.label_tag }}{{ form.is_superuser }}
-      <div id="superuser-code-field" class="hidden">
-        {{ form.superuser_code.label_tag }}{{ form.superuser_code }}
-      </div>
-      <button type="submit">Registrar</button>
-    </form>
+   <form method="post">
+  {% csrf_token %}
+
+  <label for="{{ form.username.id_for_label }}">Nombre de usuario</label>
+  {{ form.username }}
+
+  <label for="{{ form.email.id_for_label }}">Correo electrónico</label>
+  {{ form.email }}
+
+  <label for="{{ form.password.id_for_label }}">Contraseña</label>
+  {{ form.password }}
+
+  <label for="{{ form.confirm_password.id_for_label }}">Confirmar contraseña</label>
+  {{ form.confirm_password }}
+
+  <label for="{{ form.is_superuser.id_for_label }}">
+    {{ form.is_superuser }} ¿Registrar como superusuario?
+  </label>
+
+  <div id="superuser-code-field" class="hidden">
+    <label for="{{ form.superuser_code.id_for_label }}">Clave de superusuario</label>
+    {{ form.superuser_code }}
+  </div>
+
+  <button type="submit">Registrar</button>
+</form>
   </div>
 
   <script>
