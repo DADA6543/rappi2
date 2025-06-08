@@ -74,19 +74,19 @@
 </form>
   </div>
 
-  <script>
-    const checkbox = document.getElementById('id_is_superuser');
-    const superuserField = document.getElementById('superuser-code-field');
+ <script>
+  const checkbox = document.getElementById('id_is_superuser');
+  const superuserField = document.getElementById('superuser-code-field');
 
-    checkbox.addEventListener('change', function () {
-      superuserField.classList.toggle('hidden', !this.checked);
-    });
+  checkbox?.addEventListener('change', function () {
+    superuserField.classList.toggle('hidden', !this.checked);
+  });
 
-    window.addEventListener('DOMContentLoaded', function () {
-      if (checkbox.checked) {
-        superuserField.classList.remove('hidden');
-      }
-    });
-  </script>
+  window.addEventListener('DOMContentLoaded', function () {
+    if (checkbox?.checked) {
+      superuserField.classList.remove('hidden');
+    }
+  });
+</script>
 </body>
 </html>
