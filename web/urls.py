@@ -12,8 +12,8 @@ urlpatterns = [
     path('admin_comida/', views.admin_comida, name='admin_comida'),
     path('admin_utiles/', views.admin_utiles, name='admin_utiles'),
     path('admin_ropa/', views.admin_ropa, name='admin_ropa'),
-    # Otras rutas de tu proyecto...
-    path('api/', include('api.urls')),    # <— así montas /api/comida/, /api/ropa/, etc.
-        # si usas una app 'web' para las plantillas
+ 
+    path('api/', include('api.urls')),
+    path('registro/', views.registro_view, name='registro'),
     
 ]
