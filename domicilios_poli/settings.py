@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,10 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-r0u0u3$-#mh8qw_v6e($if#yo@ix8)6seyegjq&r0k%v!$(6@0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Es mejor usar variable de entorno para DEBUG en producción
+DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = ['rappi2-fffbc117749e.herokuapp.com']
-
+# Permite el dominio de tu app en Heroku y localhost para desarrollo
+ALLOWED_HOSTS = ['rappi2-fffbc117749e.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -47,7 +49,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Para servir estáticos en Heroku
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -61,12 +63,11 @@ ROOT_URLCONF = 'domicilios_poli.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        
-        'APP_DIRS': True,
+
         'DIRS': [
-            # Carpeta “templates” dentro de la app “web”
             BASE_DIR / 'web' / 'templates',
         ],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
@@ -81,17 +82,19 @@ WSGI_APPLICATION = 'domicilios_poli.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+# Usa la variable de entorno JAWSDB_URL para configurar la base de datos,
+# si no existe, usa SQLite para desarrollo local
 
 DATABASES = {
-  'default': dj_database_url.parse(os.environ.get('JAWSDB_URL', 'sqlite:///db.sqlite3'))
-    }
+    'default': dj_database_url.parse(
+        os.getenv('JAWSDB_URL', f'sqlite:///{BASE_DIR / "db.sqlite3"}'),
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 
 # Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -112,10 +115,7 @@ REST_FRAMEWORK = {
 }
 
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -126,17 +126,12 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-import os
+STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
