@@ -1,7 +1,9 @@
-from django.shortcuts import render
 from .forms import RegistroForm
 from django.contrib.auth import login
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib import messages
+from .forms import CustomRegisterForm
 
 def home(request):
     return render(request, 'home.html')
@@ -53,4 +55,4 @@ def registro(request):
     else:
         form = CustomRegisterForm()
 
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'registro.html', {'form': form})
