@@ -20,5 +20,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
-    path('home', include('web.urls')),
+    path('', lambda request: redirect('home')),  # redirige al path /home/
+    path('home/', views.home, name='home'),
 ]
