@@ -87,8 +87,7 @@ WSGI_APPLICATION = 'domicilios_poli.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.parse(
-        os.environ.get("JAWSDB_URL"),
-        engine='django.db.backends.mysql'
+        'default': dj_database_url.config(default=os.getenv('JAWSDB_URL'))
     )
 }
 
