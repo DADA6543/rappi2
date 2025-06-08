@@ -87,7 +87,6 @@ WSGI_APPLICATION = 'domicilios_poli.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('JAWSDB_URL'))
-    )
 }
 
 
