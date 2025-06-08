@@ -1,6 +1,7 @@
 from django.urls import path
 from django.urls import path, include
 from . import views
+from .views import register
 
 urlpatterns = [
     path('home/', views.home, name='home'),
@@ -14,6 +15,6 @@ urlpatterns = [
     path('admin_ropa/', views.admin_ropa, name='admin_ropa'),
     # Otras rutas de tu proyecto...
     path('api/', include('api.urls')),    # <— así montas /api/comida/, /api/ropa/, etc.
-        # si usas una app 'web' para las plantillas
+    path('registro/', register, name='registro'),
     
 ]
