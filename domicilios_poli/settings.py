@@ -86,8 +86,7 @@ WSGI_APPLICATION = 'domicilios_poli.wsgi.application'
 # si no existe, usa SQLite para desarrollo local
 
 DATABASES = {
-    'default': dj_database_url.parse(
-        'default': dj_database_url.config(default=os.getenv('JAWSDB_URL'))
+    'default': dj_database_url.config(default=os.getenv('JAWSDB_URL'))
     )
 }
 
