@@ -30,13 +30,27 @@ def admin_utiles(request):
 def admin_ropa(request):
     return render(request, 'admin_ropa.html')
 
-def registro_view(request):
+def registro(request):
     if request.method == 'POST':
-        form = RegistroForm(request.POST)
+        form = CustomRegisterForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)  # Inicia sesión automáticamente
-            return redirect('/home/')  # Puedes redirigir al home u otra vista
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            if form.cleaned_data['is_superuser']:
+                user.is_superuser = True
+                user.is_staff = True
+            user.save()
+
+            login(request, user)
+
+            # Redirigir según el tipo de usuario
+            if user.is_superuser:
+                return redirect('/admin/')  # O usar reverse('admin:index')
+            else:
+                return redirect('/')  # Cambia '/' por tu home si es otra ruta
+        else:
+            messages.error(request, "Hubo un error en el formulario.")
     else:
-        form = RegistroForm()
-    return render(request, 'registro.html', {'form': form})
+        form = CustomRegisterForm()
+
+    return render(request, 'register.html', {'form': form})
