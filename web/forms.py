@@ -1,19 +1,25 @@
-from django.urls import path
-from django.urls import path, include
-from . import views
+from django import forms
+from django.contrib.auth.models import User
 
+class CustomRegisterForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
+    is_superuser = forms.BooleanField(required=False)
+    superuser_code = forms.CharField(required=False, widget=forms.PasswordInput)
 
-urlpatterns = [
-    path('home/', views.home, name='home'),
-    path('comidas/', views.comidas, name='comidas'),
-    path('carrito/', views.carrito, name='carrito'),
-    path('ropa/', views.ropa, name='ropa'),
-    path('utiles/', views.utiles, name='utiles'),
-    path('admin_panel/', views.admin_panel, name='admin_panel'),  # Evita llamar la vista como 'admin' porque puede chocar con el admin de Django
-    path('admin_comida/', views.admin_comida, name='admin_comida'),
-    path('admin_utiles/', views.admin_utiles, name='admin_utiles'),
-    path('admin_ropa/', views.admin_ropa, name='admin_ropa'),
-    # Otras rutas de tu proyecto...
-    path('api/', include('api.urls')),
-    ]
+    class Meta:
+        model = User
+        fields = ['username', 'email']
 
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        confirm = cleaned_data.get('confirm_password')
+        is_superuser = cleaned_data.get('is_superuser')
+        code = cleaned_data.get('superuser_code')
+
+        if password != confirm:
+            raise forms.ValidationError("Las contraseñas no coinciden.")
+
+        if is_superuser and code != '2020':
+            raise forms.ValidationError("Clave de superusuario incorrecta.")
